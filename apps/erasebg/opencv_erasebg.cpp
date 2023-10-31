@@ -4,9 +4,9 @@
 #include <string>
 
 cv::Mat g_image, g_image1;
-int g_contrast = 10;
-int g_threshold = 215;
-int g_brightness = 0;
+int g_contrast = 50;
+int g_threshold = 30;
+int g_brightness = 70;
 std::string g_name = "Trackbar";
 
 void onTrackbar(int pos, void *)
@@ -30,9 +30,17 @@ void onTrackbar(int pos, void *)
     cv::imshow(g_name, g_image1);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    g_image = cv::imread("a.jpg");
+    if (argc < 2)
+    {
+        std::cout << "opencv_erasebg $IMAGE_FILE!" << std::endl;
+		return -1;
+    }
+
+    std::string str1 = argv[1];
+	std::string str2 = str1 + ".jpg";
+    g_image = cv::imread(str1);
     if (g_image.empty())
     {
         std::cout << "can not open image!" << std::endl;
@@ -50,7 +58,7 @@ int main()
         onTrackbar(0, 0);
         auto c = cv::waitKey(10);
         if (c == 's')
-            cv::imwrite("b.jpg", g_image1);
+            cv::imwrite(str2.c_str(), g_image1);
         else if (c >= 0 && c != 's')
             break;
     }
